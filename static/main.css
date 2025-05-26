@@ -110,19 +110,19 @@ h1 {
   justify-content: center;
 }
 
-.open-close-icons {
+.window-controls {
   display: flex;
   align-items: center;
 }
 
 .chatbot-header button {
   margin: 10px;
-  width: 16px;
   background-color: transparent;
   border: transparent;
 }
 
-.chatbot-header .logo {
+.chatbot-header .minimize-icon,
+.chatbot-header .close-icon {
   width: 16px;
 }
 
