@@ -189,17 +189,15 @@
     </section>
 
     <section class="message-input-container">
-      <div class="chatbot-content-wrapper">
-        <form class="message-form" onsubmit="event.preventDefault(); sendQuery();">
-          <div class="input-wrapper">
-            <textarea id="query" placeholder="Ask ChefBoost..." autofocus required></textarea>
-            <button type="submit" id="send-btn">
-              <img src="{{ url_for('static', filename='send-icon.png') }}" alt="Send" class="send-icon">
-              <span class="visually-hidden">Send prompt</span>
-            </button>
-          </div>
-        </form>
-      </div>
+      <form class="message-form" onsubmit="event.preventDefault(); sendQuery();">
+        <div class="input-wrapper">
+          <textarea id="query" placeholder="Ask ChefBoost..." autofocus required></textarea>
+          <button type="submit" id="send-btn">
+            <img src="{{ url_for('static', filename='send-icon.png') }}" alt="Send" class="send-icon">
+            <span class="visually-hidden">Send prompt</span>
+          </button>
+        </div>
+      </form>
     </section>
   </div>
 </div>
