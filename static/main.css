@@ -3,7 +3,7 @@
   --primary-color: #FFFFFF;
   --secondary-color: #000000;
   --tertiary-color: #FFA6DE;
-  --message-text: #8D8D8D;
+  --message-text: #545454;
   --message-background: #EDEDED;
   --border-radius: 15px;
   --primary-font-family: "Mulish", sans-serif;
@@ -32,11 +32,14 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
 }
 
 a {
   color: inherit;
+}
+
+button:hover {
+  cursor: pointer;
 }
 
 h1 {

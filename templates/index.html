@@ -13,7 +13,6 @@
     /* Allow scrolling if needed */
     overflow-y: auto;
     /* Vertical scrollbar if content exceeds 60vh */
-    /* margin: 1rem 0; */
     padding: 1rem;
     background: #fafafa;
   }
@@ -190,6 +189,7 @@
     <section class="message-input-container">
       <form class="message-form" onsubmit="event.preventDefault(); sendQuery();">
         <div class="input-wrapper">
+          <label for="query" class="visually-hidden">Ask ChefBoost</label>
           <textarea id="query" placeholder="Ask ChefBoost..." autofocus required></textarea>
           <button type="submit" id="send-btn">
             <img src="{{ url_for('static', filename='send-icon.png') }}" alt="Send" class="send-icon">
