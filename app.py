@@ -27,7 +27,7 @@ if not api_key:
     raise ValueError("Missing OPENAI_API_KEY in environment variables.")
 
 chat_llm = ChatOpenAI(model="gpt-4o-mini", api_key=api_key)
-log.info(api_key)
+#log.info(api_key)
 
 # Flask app setup
 app = Flask(__name__)
