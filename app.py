@@ -50,6 +50,27 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+# User model
+class User(UserMixin, db.Model):
+   id = db.Column(db.Integer, primary_key=True)
+   username = db.Column(db.String(150), unique=True, nullable=False)
+   email = db.Column(db.String(150), unique=True, nullable=False)
+   password = db.Column(db.String(150), nullable=False)
+
+@login_manager.user_loader
+def load_user(user_id):
+   return db.session.get(User, int(user_id))
+
+# Initialize Supabase and LangChain components
+supabase_https_url = os.getenv("SUPABASE_HTTPS_URL")
+supabase_key = os.getenv("SUPABASE_KEY")
+ 
+supabase_client = create_client(supabase_https_url, supabase_key, options=ClientOptions(
+   postgrest_client_timeout=120,
+   storage_client_timeout=120,
+   schema="public",
+ ))
+
 # Define MemorySaver instance for langgraph agent
 memory = MemorySaver()
 
