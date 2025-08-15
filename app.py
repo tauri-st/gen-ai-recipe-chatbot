@@ -84,6 +84,7 @@ def index():
 
 # Stream route
 @app.route("/stream", methods=["GET"])
+@login_required
 def stream():
 
     graph = create_react_agent(
