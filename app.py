@@ -221,4 +221,7 @@ def log_run(run_status):
 
 # Run the Flask server
 if __name__ == "__main__":
+    with app.app_context():
+       db.create_all()  # Ensure the database is created
+       print("Database created.")
     app.run(debug=True)

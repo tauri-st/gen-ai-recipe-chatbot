@@ -159,7 +159,18 @@
 
 <!-- Add user info conditional statement for the header section -->
 {% block header %}
-
+<div class="user-info">
+ {% if current_user.is_authenticated %}
+ <div class="avatar-circle">
+   <span>{{ current_user.username[0] | upper }}</span>
+ </div>
+ <a href="{{ url_for('my_account') }}">My Account</a>
+ <a href="{{ url_for('logout') }}">Logout</a>
+ {% else %}
+ <a href="{{ url_for('login') }}">Login</a>
+ <a href="{{ url_for('signup') }}">Sign Up</a>
+ {% endif %}
+</div>
 {% endblock %}
 
 {% block content %}
