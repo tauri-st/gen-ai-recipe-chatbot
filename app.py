@@ -38,6 +38,9 @@ chat_llm = ChatOpenAI(model="gpt-4o-mini", api_key=api_key)
 
 # Flask app setup
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "mysecret")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SUPABASE_URL")
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Define MemorySaver instance for langgraph agent
 memory = MemorySaver()
