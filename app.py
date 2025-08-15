@@ -135,6 +135,38 @@ def stream():
 
     return Response(generate(), content_type="text/event-stream")
 
+# Sign up route
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+       username = request.form.get("username")
+       email = request.form.get("email")
+       password = request.form.get("password")
+       
+       # Query the database and filter for the username
+       user = User.query.filter_by(username=username).first()
+       
+       # If there is a user with the same username in the database, reload the page
+       if user:
+            flash("Username already registered.", "error")
+            return redirect(url_for("signup"))
+       
+       # If new user, hash their password using werkzeug module
+       new_user = User(
+           username=username,
+           email=email,
+           password=generate_password_hash(password, method="pbkdf2:sha256")
+       )
+
+       # Add new user to the database
+       db.session.add(new_user)
+       db.session.commit()
+       flash("Account created successfully! Please log in.", "success")
+       return redirect(url_for("login"))
+    
+    return render_template("signup.html")
+
+
 # Function to add to the log in the app.log file
 def log_run(run_status):
     if run_status in ["cancelled", "failed", "expired"]:
