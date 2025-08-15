@@ -6,7 +6,14 @@ import datetime
 from dotenv import load_dotenv
 
 # Flask imports
-from flask import Flask, render_template, request, Response, stream_with_context
+from flask import Flask, render_template, request, redirect, url_for, flash, Response, stream_with_context
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+
+# Supabase imports
+from supabase import create_client
+from supabase.client import ClientOptions
 
 # LangChain imports
 from langgraph.prebuilt import create_react_agent
