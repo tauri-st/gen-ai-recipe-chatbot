@@ -42,6 +42,14 @@ app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "mysecret")
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SUPABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# Database setup
+db = SQLAlchemy(app)
+
+# Flask-Login setup
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
 # Define MemorySaver instance for langgraph agent
 memory = MemorySaver()
 
