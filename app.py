@@ -185,6 +185,34 @@ def login():
     
     return render_template("login.html")
 
+# My Account route
+@app.route("/my_account", methods=["GET", "POST"])
+@login_required
+def my_account():
+    if request.method == "POST":
+       current_password = request.form.get("current_password")
+       new_password = request.form.get("new_password")
+       confirm_password = request.form.get("confirm_password")
+       if not check_password_hash(current_user.password, current_password):
+            flash("Current password is incorrect.", "error")
+            return redirect(url_for("my_account"))
+       if new_password != confirm_password:
+           flash("New passwords do not match.", "error")
+           return redirect(url_for("my_account"))
+       
+       current_user.password = generate_password_hash(new_password, method="pbkdf2:sha256")
+       db.session.commit()
+       flash("Password updated successfully!", "success")
+       return redirect(url_for("index"))
+    return render_template("my_account.html", user=current_user)
+
+# Logout route
+@app.route("/logout")
+@login_required
+def logout():
+   logout_user()
+   flash("You have been logged out.", "success")
+   return redirect(url_for("login"))
 
 # Function to add to the log in the app.log file
 def log_run(run_status):
