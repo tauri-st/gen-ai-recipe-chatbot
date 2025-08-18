@@ -98,3 +98,14 @@ def download_and_store_books(matching_books, vector_store):
  
         except Exception as e:
             print(f"Error processing {title}: {e}")
+
+         # Batch insert documents to Supabase
+        batch_size = 50  # Adjust as necessary
+        for i in range(0, len(documents), batch_size):
+            batch = documents[i:i + batch_size]
+            try:
+                vector_store.add_documents(batch)
+                print(f"Successfully uploaded batch {i // batch_size + 1} "
+                 f"of {len(documents) // batch_size + 1}.")
+            except Exception as e:
+                print(f"Error storing batch {i // batch_size + 1}: {e}")
