@@ -109,3 +109,31 @@ def download_and_store_books(matching_books, vector_store):
                  f"of {len(documents) // batch_size + 1}.")
             except Exception as e:
                 print(f"Error storing batch {i // batch_size + 1}: {e}")
+
+
+###############################################################################
+# RAG FUNCTIONS
+###############################################################################
+
+def perform_similarity_search(query, vector_store):
+    """Perform a similarity search using LangChain."""
+    print("Performing similarity search...")
+
+    docs = vector_store.similarity_search(query)
+
+    # Wrap each Document in an item of the "results" list
+    results_list = []
+
+    for doc in docs:
+       results_list.append({
+           "sub_query": query,
+           "answer": None,  # No LLM answer, just raw search results
+           "sources": doc.metadata.get("source") if doc.metadata else None,
+           "source_documents": [doc]
+       })
+
+    return {
+       "method": "similarity_search",
+       "query": query,
+       "results": results_list
+    }
