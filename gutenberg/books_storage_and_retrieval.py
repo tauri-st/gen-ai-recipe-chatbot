@@ -61,3 +61,40 @@ def search_gutenberg_titles(cache, keywords, top_n=10, start_date=None, end_date
         matching_books.append((gutenbergbookid, title))
 
     return matching_books
+
+
+# Chunk the data and generate vector embeddings to process in Supabase
+def download_and_store_books(matching_books, vector_store):
+    """Download books, split text, generate embeddings, and store in Supabase."""
+
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000,
+        chunk_overlap=200
+    )
+
+    # Loop over data in matching_books
+    documents = []
+    for book_id, title in matching_books:
+        print(f"Processing: {title} (ID: {book_id})")
+        try:
+            # Download book content
+            raw_text = get_text_by_id(book_id)
+            content = raw_text.decode("utf-8", errors="ignore")  # Decode to string
+ 
+            # Split the text into manageable chunks
+            chunks = text_splitter.split_text(content)
+ 
+            for i, chunk in enumerate(chunks):
+                # Construct metadata as a JSON object
+                metadata = {
+                    "source": title, # Key must be 'source' for LangChain
+                    "gutenberg_id": str(book_id),
+                    "chunk_index": i,
+                    "content_length": len(chunk)
+                }
+ 
+                # Create a Document object
+                documents.append(Document(page_content=chunk, metadata=metadata))
+ 
+        except Exception as e:
+            print(f"Error processing {title}: {e}")
