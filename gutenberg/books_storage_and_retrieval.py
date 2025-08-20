@@ -213,9 +213,14 @@ def main():
     parser.add_argument("-ed", "--end_date", type=str, default="2000-12-31", help="Search end date.")
     parser.add_argument("-q", "--query", type=str, default="How to make a sponge cake with fruit flavor?", help="Query for retrieval.")
     parser.add_argument("-ss", "--perform_similarity_search", action="store_true", help="Perform similarity search.")
+    parser.add_argument("-rq", "--perform_retrieval_qa", action="store_true", help="Perform retrieval QA.")
 
     # Parse the arguments
     args = parser.parse_args()
+
+    # Run similarity search by default
+    if not args.perform_similarity_search and not args.perform_retrieval_qa:
+        args.perform_similarity_search = True
     
     # Variables
     top_n = args.top_n
@@ -288,6 +293,8 @@ def main():
 
     if args.perform_similarity_search:
         results = perform_similarity_search(query, vector_store)
+    elif args.perform_retrieval_qa:
+       results = perform_retrieval_qa(query, chat_llm, vector_store)
     else:
         print("No operation selected. Use the CLI flags to choose an operation.")
         return
