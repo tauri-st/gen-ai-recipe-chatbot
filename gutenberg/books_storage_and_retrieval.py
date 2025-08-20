@@ -18,10 +18,17 @@ from langchain.chains import RetrievalQAWithSourcesChain
 from supabase import create_client, Client
 from supabase.client import ClientOptions
 
+###############################################################################
+# NV & GLOBALS
+###############################################################################
 
 #Filter the database by keywords and dates
 # Constants
 COOKING_KEYWORDS = ["cooking", "recipes", "cookbook", "culinary"]
+
+###############################################################################
+# GUTENBERG SEARCH & METADATA
+###############################################################################
 
 def search_gutenberg_titles(cache, keywords, top_n=10, start_date=None, end_date=None):
     """
@@ -115,6 +122,10 @@ def download_and_store_books(matching_books, vector_store):
 # RAG FUNCTIONS
 ###############################################################################
 
+###############################################################################
+# Similarity Search
+###############################################################################
+
 def perform_similarity_search(query, vector_store):
     """Perform a similarity search using LangChain."""
     print("Performing similarity search...")
@@ -137,6 +148,10 @@ def perform_similarity_search(query, vector_store):
        "query": query,
        "results": results_list
     }
+
+###############################################################################
+# MAIN
+###############################################################################
 
 def main():
     parser = argparse.ArgumentParser(
