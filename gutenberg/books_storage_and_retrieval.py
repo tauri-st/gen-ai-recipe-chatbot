@@ -219,6 +219,31 @@ def main():
             
         print("Downloading and storing books...")
         download_and_store_books(matching_books, vector_store)
+    
+    # Test query
+    query = args.query
+    print(f"Running query: {query}")
 
+    if args.perform_similarity_search:
+        results = perform_similarity_search(query, vector_store)
+    else:
+        print("No operation selected. Use the CLI flags to choose an operation.")
+        return
+    
+    # Print out the results
+    # Check if results in None or empty
+    if not results:
+        print(f"\nNo results found for query: {query}")
+    else:
+        for i, res in enumerate(results['results'], start=1):
+            print(f"\n[Query {i}]: {res['sub_query']}")
+            print("\n[Answer]")
+            print(res["answer"])
+            print("\n[Source Documents]\n")
+            for doc in res["source_documents"]:
+                print("\n[Source]", doc.metadata.get("source"))
+                print("\n[Content]", doc.page_content)
+            print("-" * 70)
+    
 if __name__ == "__main__":
    main()
