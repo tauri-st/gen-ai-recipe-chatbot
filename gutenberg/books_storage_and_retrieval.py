@@ -123,6 +123,53 @@ def download_and_store_books(matching_books, vector_store):
 ###############################################################################
 
 ###############################################################################
+# Retrieval QA
+###############################################################################
+
+def perform_retrieval_qa(query, llm, vector_store):
+    """
+    Perform a retrieval QA using LangChain.
+    Returns a unified data structure.
+    """
+
+    print("Performing retrieval qa...")
+
+    # Instantiate vector store retriever
+    # "search_kwargs" limits results to top 3 most relevant
+    books_retriever = vector_store.as_retriever(search_kwargs={"k": 3})
+
+    # Create the QA chain
+    chain = RetrievalQAWithSourcesChain.from_chain_type(
+        llm=llm,
+        retriever=books_retriever,
+        chain_type="stuff",
+        return_source_documents=True
+    )
+
+    # Invoke the chain
+    chain_result = chain.invoke({"question": query})
+
+    # typical chain_result for reference:
+    # {
+    #   "answer": "...",
+    #   "sources": "...",
+    #   "source_documents": [...],
+    # }
+
+    return {
+        "method": "retrieval_qa",
+        "query": query,
+        "results": [
+            {
+                "sub_query": query,  # same as main query
+                "answer": chain_result.get("answer"),
+                "sources": chain_result.get("sources"),
+                "source_documents": chain_result.get("source_documents", [])
+            }
+        ]
+    }
+
+###############################################################################
 # Similarity Search
 ###############################################################################
 
