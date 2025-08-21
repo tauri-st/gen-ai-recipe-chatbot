@@ -110,6 +110,23 @@ def create_books_similarity_search_tool():
         return json.dumps(results, default=str)
     
     return get_books_similarity_search
+
+# Retrieval QA (Books)
+def create_books_retrieval_qa_tool():
+    @tool
+    def get_books_retrieval_qa(input: str) -> str:
+        """
+        Tool for short Q&A over the 'books' corpus using retrieval QA.
+        """
+
+        query = input.strip()
+
+        chain_result = perform_books_retrieval_qa(query, chat_llm, books_vector_store)
+        # Typically returns a dict with 'answer', 'sources', 'source_documents', etc.
+        return json.dumps(chain_result, default=str)
+    
+    return get_books_retrieval_qa
+
 # Routes
 # Index route
 @app.route("/", methods=["GET"])
