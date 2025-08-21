@@ -139,9 +139,15 @@ def index():
 @login_required
 def stream():
 
+    books_retrieval_qa_tool = create_books_retrieval_qa_tool()
+    books_similarity_search_tool = create_books_similarity_search_tool()
+    
     graph = create_react_agent(
         model=chat_llm,
-        tools=[],
+        tools=[
+            books_retrieval_qa_tool,
+            books_similarity_search_tool,
+        ],
         checkpointer=memory,
         debug=True
     )
