@@ -18,7 +18,15 @@ from supabase.client import ClientOptions
 # LangChain imports
 from langgraph.prebuilt import create_react_agent
 from langgraph.checkpoint.memory import MemorySaver
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import SupabaseVectorStore
+from langchain.agents import tool
 
+# RAG imports
+from gutenberg.books_storage_and_retrieval import (
+   perform_similarity_search as perform_books_similarity_search,
+   perform_retrieval_qa as perform_books_retrieval_qa,
+)
 
 # Load environment variables from a .env file
 load_dotenv(override=True)
@@ -71,10 +79,37 @@ supabase_client = create_client(supabase_https_url, supabase_key, options=Client
    schema="public",
  ))
 
+embeddings = OpenAIEmbeddings(openai_api_key=api_key)
+
+books_vector_store = SupabaseVectorStore(
+    client=supabase_client,
+    table_name="books",
+    embedding=embeddings,
+    query_name="match_books"
+    )
+
 # Define MemorySaver instance for langgraph agent
 memory = MemorySaver()
 
 
+# Create the agent tools for the RAG functions
+# Similarity Search (Books)
+def create_books_similarity_search_tool():
+    @tool
+    def get_books_similarity_search(input: str) -> str:
+        """
+        Tool to perform a simple similarity search on the 'books' vector store.
+        Returns the top matching chunks as JSON.
+        """
+        
+        query = input.strip()
+
+        results = perform_books_similarity_search(query, books_vector_store)
+        # 'perform_similarity_search' might return Documents or a custom structure.
+        # Convert it to JSON or a string
+        return json.dumps(results, default=str)
+    
+    return get_books_similarity_search
 # Routes
 # Index route
 @app.route("/", methods=["GET"])
