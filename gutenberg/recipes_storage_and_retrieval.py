@@ -46,7 +46,7 @@ CUISINE = ["italian", "french", "german", "australian", "english",  "american", 
 
 SPECIAL_CONSIDERATIONS = ["vegetarian", "vegan", "keto", "nut-free", "dairy-free", "gluten-free", "low-carb"]   
 
-# Global for spaCy NLP model
+# Global for spaCy NLP (natural language processing) model
 nlp = None
 
 ###############################################################################
@@ -86,7 +86,34 @@ def search_gutenberg_titles(cache, keywords, top_n=10, start_date=None, end_date
 
 
 # TODO: Define the extract_metadata_nlp function to implement the heuristic-based method for NLP metadata extraction
+def extract_metadata_nlp(content):
+    """
+    Use NLP to extract recipe-related metadata from the text content using the constants COMMON_INGREDIENTS, RECIPE_TYPE, CUISINE, and SPECIAL_CONSIDERATIONS.
+    """
 
+    # Tokenize and process text with spaCy
+    doc = nlp(content)
+ 
+    # Extract nouns and proper nouns (potential ingredients)
+    possible_ingredients = [
+        token.text.lower() for token in doc
+        # If token has the attributes of being the part of speech category noun or proper noun and consists of alphabetical letters
+        if token.pos_ in {"NOUN", "PROPN"} and token.is_alpha
+    ]
+
+    # Filter using the predefined ingredients list
+    ingredients = [ingredient for ingredient in possible_ingredients if ingredient in COMMON_INGREDIENTS]
+ 
+    # Deduplicate and sort the list of ingredients
+    ingredients = sorted(set(ingredients))
+
+    metadata = {
+        "recipe_type": list(set(word for word in content.lower().split() if word in RECIPE_TYPE)),
+        "cuisine": list(set(word for word in content.lower().split() if word in CUISINE)),
+        "special_considerations": list(set(word for word in content.lower().split() if word in SPECIAL_CONSIDERATIONS)),
+        "ingredients": ingredients
+    }
+    return metadata
 
 # TODO: Define the construct_metadata function to build a metadata dictionary for each recipe
 
