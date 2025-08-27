@@ -239,7 +239,58 @@ def perform_similarity_search(query, llm, vector_store):
 ###############################################################################
 
 # TODO: Perform a self-query retrieval
+def perform_self_query_retrieval(query, llm, vector_store):
+    """
+    Creates a SelfQueryRetriever for the following metadata fields:
+      - recipe_title
+      - recipe_type
+      - cuisine
+      - special_considerations
+      - ingredients
+    """
 
+    metadata_field_info = [
+        AttributeInfo(
+            name="recipe_title",
+            description="The title of the recipe. Use the like operator for partial matches.",
+            type="string",
+        ),
+        AttributeInfo(
+            name="recipe_type",
+            description=f"The type of recipe (e.g., {RECIPE_TYPE}).",
+            type="string",
+        ),
+        AttributeInfo(
+            name="cuisine",
+            description=f"The cuisine type (e.g., {CUISINE}). Use the like operator for partial matches.",
+            type="string",
+        ),
+        AttributeInfo(
+            name="special_considerations",
+            description=f"Dietary restrictions (e.g., {SPECIAL_CONSIDERATIONS}). Use the like operator for partial matches.",
+            type="list[string]",
+        ),
+        AttributeInfo(
+            name="ingredients",
+            description=f"Key ingredients in the recipe (e.g., {COMMON_INGREDIENTS}). Use the like operator for partial matches.",
+            type="list[string]",
+        ),
+    ]
+ 
+    doc_content_desc = "Text content describing a cooking recipe"
+    document_contents = "The text content of a cooking recipe, including its ingredients, instructions, and relevant metadata."
+
+    retriever = SelfQueryRetriever.from_llm(
+        llm,
+        vector_store,
+        doc_content_desc,
+        metadata_field_info,
+        verbose=True # See the retriever's thought process
+    )
+
+    results = retriever.invoke(query)
+
+    return build_outputs(results, llm)
 
 # TODO: Define a function named build_outputs to create a standard output format from the data returned by the similarity search and self-query retrieval functions
 
