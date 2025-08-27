@@ -114,8 +114,65 @@ def extract_metadata_nlp(content):
     }
     return metadata
 
-# TODO: Define the construct_metadata function to build a metadata dictionary for each recipe
+def construct_metadata(gutenberg_book_id, cache):
+    """
+    Build minimal metadata from Gutenberg's cache to attach to each recipe.
+    """
 
+    query = f"""
+        SELECT 
+            b.gutenbergbookid AS gutenbergbookid,
+            b.dateissued AS dateissued, 
+            t.name AS title, 
+            GROUP_CONCAT(a.name, '# ') AS authors,
+            GROUP_CONCAT(s.name, '# ') AS subjects
+        FROM books b
+        LEFT JOIN titles t ON b.id = t.bookid
+        LEFT JOIN book_authors ba ON b.id = ba.bookid
+        LEFT JOIN authors a ON ba.authorid = a.id
+        LEFT JOIN book_subjects bs ON b.id = bs.bookid
+        LEFT JOIN subjects s ON bs.subjectid = s.id
+        WHERE b.gutenbergbookid = {gutenberg_book_id}
+        GROUP BY b.id, t.name;
+    """
+    cursor = cache.native_query(query)
+
+    # Handle the cursor result correctly
+    result = None
+    for row in cursor:
+        result = row  # Assuming one row is returned per book_id
+ 
+    # Ensure result exists
+    if not result:
+        print(f"No metadata found for book ID {gutenberg_book_id}.")
+        return {
+            "gutenberg_id": gutenberg_book_id,
+            "source": "Unknown",
+            "authors": [],
+            "subjects": []
+        }
+    
+    gutenberg_id, dateissued, title, authors, subjects = result
+    if authors is None:
+        authors = "Unknown"
+    if subjects is None:
+        subjects = "Unknown"
+
+    # Download book content
+    raw_text = get_text_by_id(gutenberg_book_id)
+    content = raw_text.decode("utf-8", errors="ignore") if raw_text else ""
+
+    # Extract metadata using NLP
+    nlp_metadata = extract_metadata_nlp(content)
+
+    return {
+        "gutenberg_id": gutenberg_id,
+        "date_issued": dateissued,
+        "source": title, # Key must be 'source' for LangChain
+        "authors": authors.split("# ") if authors else [],
+        "subjects": subjects.split("# ") if subjects else [],
+        **nlp_metadata
+    }
 
 ###############################################################################
 # DOWNLOAD, EXTRACT, & STORE
