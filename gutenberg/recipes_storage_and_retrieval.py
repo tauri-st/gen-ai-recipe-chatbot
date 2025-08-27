@@ -226,8 +226,13 @@ def download_and_store_books(matching_books, cache, vector_store):
 # BASELINE SIMILARITY SEARCH (SINGLE-QUERY)
 ###############################################################################
 
-# TODO: Perform a vector-based similarity search
-
+def perform_similarity_search(query, llm, vector_store):
+    """
+    Perform retrieval with a single query.
+    """
+    recipes = vector_store.similarity_search(query)
+ 
+    return build_outputs(recipes, llm)
 
 ###############################################################################
 # SELF-QUERY RETRIEVER
