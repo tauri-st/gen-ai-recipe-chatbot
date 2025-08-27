@@ -85,7 +85,6 @@ def search_gutenberg_titles(cache, keywords, top_n=10, start_date=None, end_date
     return matching_books
 
 
-# TODO: Define the extract_metadata_nlp function to implement the heuristic-based method for NLP metadata extraction
 def extract_metadata_nlp(content):
     """
     Use NLP to extract recipe-related metadata from the text content using the constants COMMON_INGREDIENTS, RECIPE_TYPE, CUISINE, and SPECIAL_CONSIDERATIONS.
