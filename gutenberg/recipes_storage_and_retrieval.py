@@ -238,7 +238,6 @@ def perform_similarity_search(query, llm, vector_store):
 # SELF-QUERY RETRIEVER
 ###############################################################################
 
-# TODO: Perform a self-query retrieval
 def perform_self_query_retrieval(query, llm, vector_store):
     """
     Creates a SelfQueryRetriever for the following metadata fields:
@@ -292,8 +291,17 @@ def perform_self_query_retrieval(query, llm, vector_store):
 
     return build_outputs(results, llm)
 
-# TODO: Define a function named build_outputs to create a standard output format from the data returned by the similarity search and self-query retrieval functions
-
+def build_outputs(results, llm):
+    outputs = []
+ 
+    for i, res in enumerate(results, start=1):
+        processed_output = {
+            "recipe": res.page_content,
+            "metadata": res.metadata
+        }
+        outputs.append(processed_output)
+ 
+    return outputs
 
 ###############################################################################
 # MAIN
