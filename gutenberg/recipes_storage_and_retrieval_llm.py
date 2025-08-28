@@ -565,7 +565,16 @@ def build_self_query_retriever(llm, vector_store, structured_query_translator):
 
     return sq_retriever
 
-# TODO: Define a perform_self_query_retrieval function to create a SelfQueryRetriever and Perform a self-query retrieval using LangChain
+# Define a perform_self_query_retrieval function to create a SelfQueryRetriever and Perform a self-query retrieval using LangChain
+def perform_self_query_retrieval(query, llm, vector_store, structured_query_translator):
+    """
+    Creates a SelfQueryRetriever for metadata fields about recipes.
+    """
+    retriever = build_self_query_retriever(llm, vector_store, structured_query_translator)
+ 
+    recipes = retriever.invoke(query)
+ 
+    return build_outputs(recipes, llm)
 
 
 def build_outputs(results, llm):
