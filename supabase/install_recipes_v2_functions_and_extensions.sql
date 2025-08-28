@@ -3,7 +3,7 @@ create extension if not exists vector;
 
 -- Create a table to store your recipes
 create table
-  recipes_v2 (
+  recipes_llm (
     id uuid primary key,
     content text, -- corresponds to Document.pageContent
     metadata jsonb, -- corresponds to Document.metadata
@@ -11,7 +11,7 @@ create table
   );
 
 -- Create a function to search for recipes
-create function match_recipes_v2 (
+create function match_recipes_llm (
   query_embedding vector (1536),
   filter jsonb default '{}'
 ) returns table (

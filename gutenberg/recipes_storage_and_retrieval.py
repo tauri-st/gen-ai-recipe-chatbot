@@ -372,7 +372,7 @@ def main():
         client=supabase_client,
         embedding=embeddings,
         table_name="recipes_v2",
-        query_name="match_recipes"
+        query_name="match_recipes_v2"
     )
 
     # Initialize Gutenberg cache
