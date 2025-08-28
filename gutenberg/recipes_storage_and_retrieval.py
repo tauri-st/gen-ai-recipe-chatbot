@@ -323,9 +323,9 @@ def main():
     # Parse the arguments
     args = parser.parse_args()
     
-    # TODO: Add conditional statement to run the use_similarity_search function if no flag is specified
     # Set default behavior: use similarity search if neither is specified
-
+    if not args.use_similarity_search and not args.use_self_query_retrieval:
+       args.use_similarity_search = True
 
     top_n = args.top_n
     start_date = args.start_date
@@ -371,7 +371,7 @@ def main():
     vector_store = SupabaseVectorStore(
         client=supabase_client,
         embedding=embeddings,
-        table_name="recipes",
+        table_name="recipes_v2",
         query_name="match_recipes"
     )
 
