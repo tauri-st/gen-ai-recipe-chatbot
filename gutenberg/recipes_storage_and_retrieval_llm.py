@@ -544,7 +544,26 @@ def build_self_query_retriever(llm, vector_store, structured_query_translator):
                             )"""
             }
         )
-    ]   
+    ]
+
+    prompt = get_query_constructor_prompt(
+        doc_content_desc,
+        metadata_field_info,
+        examples=examples
+    )
+
+    output_parser = StructuredQueryOutputParser.from_components()
+
+    query_constructor = prompt | llm | output_parser
+
+    # Call LangChain's Self Query Retriever:
+    sq_retriever = SelfQueryRetriever(
+        query_constructor=query_constructor,
+        vectorstore=vector_store,
+        structured_query_translator=structured_query_translator,
+    )
+
+    return sq_retriever
 
 # TODO: Define a perform_self_query_retrieval function to create a SelfQueryRetriever and Perform a self-query retrieval using LangChain
 
