@@ -479,8 +479,72 @@ def perform_similarity_search(query, llm, vector_store):
 # SELF-QUERY RETRIEVER
 ###############################################################################
 
-# TODO: Define the build_ a self-query retriever to build a query constructor
+# Define the build_ a self-query retriever to build a query constructor
+def build_self_query_retriever(llm, vector_store, structured_query_translator):
+    metadata_field_info = [
+        AttributeInfo(
+            name="recipe_title",
+            description="The title of the recipe. Use the like operator for partial matches.",
+            type="string",
+        ),
+        AttributeInfo(
+            name="recipe_type",
+            description=f"The type of recipe (e.g., {RECIPE_TYPE}).",
+            type="string",
+        ),
+        AttributeInfo(
+            name="cuisine",
+            description=f"The cuisine type (e.g., {CUISINE}). Use like operator for partial matches.",
+            type="string",
+        ),
+        AttributeInfo(
+            name="special_considerations",
+            description=f"Dietary restrictions (e.g., {SPECIAL_CONSIDERATIONS}). Use like operator for partial matches.",
+            type="list[string]",
+        ),
+        AttributeInfo(
+            name="ingredients",
+            description=f"Key ingredients (e.g., {COMMON_INGREDIENTS}). Use like operator for partial matches.",
+            type="list[string]",
+        ),
+    ]
 
+    doc_content_desc = "Text content describing a cooking recipe"
+
+    examples = [
+        (
+            "Show me all American dessert recipes but not vegetarian.",
+            {
+                "query": "American dessert",
+                "filter": """and(
+                                eq("cuisine", 'american'), 
+                                eq("recipe_type", 'dessert'), 
+                                ne("special_considerations", 'vegetarian')
+                            )"""
+            }
+        ),
+        (
+            "Show me Italian recipes that don't include tomatoes.",
+            {
+                "query": "Italian pasta",
+                "filter": """and(
+                                eq("cuisine", 'italian'), 
+                                eq("recipe_type", 'dinner'), 
+                                ne("ingredients", 'tomatoes')
+                            )"""
+            }
+        ),
+        (
+            "Show me all vegetarian breakfast recipes.",
+            {
+                "query": "Vegetarian breakfast",
+                "filter": """and( 
+                                eq("recipe_type", 'breakfast'), 
+                                eq("special_considerations", 'vegetarian')
+                            )"""
+            }
+        )
+    ]   
 
 # TODO: Define a perform_self_query_retrieval function to create a SelfQueryRetriever and Perform a self-query retrieval using LangChain
 
