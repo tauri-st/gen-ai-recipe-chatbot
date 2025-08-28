@@ -506,8 +506,8 @@ def main():
     recipes_vector_store = SupabaseVectorStore(
         client=supabase_client,
         embedding=embeddings,  
-        table_name="recipes_v2",
-        query_name="match_recipes_v2"
+        table_name="recipes_llm",
+        query_name="match_recipes_llm"
     )
 
     cache = GutenbergCache.get_cache()
