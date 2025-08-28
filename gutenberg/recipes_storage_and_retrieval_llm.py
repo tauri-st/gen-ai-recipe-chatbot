@@ -466,7 +466,13 @@ def download_and_store_books(matching_books, cache, llm, vector_store, oversampl
 # BASELINE SIMILARITY SEARCH (SINGLE-QUERY)
 ###############################################################################
 
-# TODO: Perform a vector-based similarity search using LangChain
+def perform_similarity_search(query, llm, vector_store):
+    """
+    Perform similarity search using LangChain.
+    """
+    recipes = vector_store.similarity_search(query)
+ 
+    return build_outputs(recipes, llm)
 
 
 ###############################################################################
