@@ -20,6 +20,7 @@ from langgraph.prebuilt import create_react_agent
 from langgraph.checkpoint.memory import MemorySaver
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import SupabaseVectorStore
+from langchain_community.query_constructors.supabase import SupabaseVectorTranslator
 from langchain.agents import tool
 
 # RAG imports
@@ -151,7 +152,7 @@ def create_recipes_similarity_search_tool():
         query = input.strip()
 
         results = perform_recipes_similarity_search(query, chat_llm, recipes_vector_store)
-        # 'perform_similarity_search' might return Documents or a custom structure.
+        # 'perform_recipes_similarity_search' might return Documents or a custom structure.
         # Convert it to JSON or a string
         return json.dumps(results, default=str)
     
@@ -167,7 +168,7 @@ def create_recipes_self_query_tool():
 
         query = input.strip()
 
-        results = perform_recipes_self_query(query, chat_llm, recipes_vector_store, SupabaseVectorTranslator())
+        results = perform_recipes_self_query_retrieval(query, chat_llm, recipes_vector_store, SupabaseVectorTranslator())
         # Typically returns a dict with 'answer', 'sources', 'source_documents', etc.
         return json.dumps(results, default=str)
     
@@ -187,12 +188,16 @@ def stream():
 
     books_retrieval_qa_tool = create_books_retrieval_qa_tool()
     books_similarity_search_tool = create_books_similarity_search_tool()
-    
+    recipes_similarity_search_tool = create_recipes_similarity_search_tool()
+    recipes_self_query_tool = create_recipes_self_query_tool()
+
     graph = create_react_agent(
         model=chat_llm,
         tools=[
             books_retrieval_qa_tool,
             books_similarity_search_tool,
+            recipes_similarity_search_tool,
+            recipes_self_query_tool,
         ],
         checkpointer=memory,
         debug=True
