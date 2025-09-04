@@ -28,6 +28,11 @@ from gutenberg.books_storage_and_retrieval import (
    perform_retrieval_qa as perform_books_retrieval_qa,
 )
 
+from gutenberg.recipes_storage_and_retrieval_llm import (
+    perform_similarity_search as perform_recipes_similarity_search,
+    perform_self_query_retrieval as perform_recipes_self_query_retrieval,
+)
+
 # Load environment variables from a .env file
 load_dotenv(override=True)
 
@@ -88,6 +93,13 @@ books_vector_store = SupabaseVectorStore(
     query_name="match_books"
     )
 
+recipes_vector_store = SupabaseVectorStore(
+    client=supabase_client,
+    table_name="recipes_llm",
+    embedding=embeddings,
+    query_name="match_recipes_llm"
+    )
+
 # Define MemorySaver instance for langgraph agent
 memory = MemorySaver()
 
@@ -126,6 +138,40 @@ def create_books_retrieval_qa_tool():
         return json.dumps(chain_result, default=str)
     
     return get_books_retrieval_qa
+
+# Similarity Search (Recipes)
+def create_recipes_similarity_search_tool():
+    @tool
+    def get_recipes_similarity_search(input: str) -> str:
+        """
+        Tool to perform a simple similarity search on the 'recipes_llm' vector store.
+        Returns the top matching chunks as JSON.
+        """
+        
+        query = input.strip()
+
+        results = perform_recipes_similarity_search(query, chat_llm, recipes_vector_store)
+        # 'perform_similarity_search' might return Documents or a custom structure.
+        # Convert it to JSON or a string
+        return json.dumps(results, default=str)
+    
+    return get_recipes_similarity_search
+
+# Retrieval QA (Recipes)
+def create_recipes_self_query_tool():
+    @tool
+    def get_recipes_self_query(input: str) -> str:
+        """
+        Tool for searching recipes with metadata-based self-query retrieval. (E.g. filter by recipe_type, cuisine, special_considerations, etc.)
+        """
+
+        query = input.strip()
+
+        results = perform_recipes_self_query(query, chat_llm, recipes_vector_store, SupabaseVectorTranslator())
+        # Typically returns a dict with 'answer', 'sources', 'source_documents', etc.
+        return json.dumps(results, default=str)
+    
+    return get_recipes_self_query
 
 # Routes
 # Index route
