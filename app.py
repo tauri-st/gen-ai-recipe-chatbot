@@ -22,6 +22,10 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import SupabaseVectorStore
 from langchain_community.query_constructors.supabase import SupabaseVectorTranslator
 from langchain.agents import tool
+from langchain_core.runnables import RunnableParallel, RunnablePassthrough
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from typing import List
 
 # RAG imports
 from gutenberg.books_storage_and_retrieval import (
