@@ -580,13 +580,24 @@ def perform_self_query_retrieval(query, llm, vector_store, structured_query_tran
     return build_outputs(recipes, llm)
 
 
-def build_outputs(results, llm):
+def build_outputs(results: List[Document], llm) -> List[dict]:
+    
+    chain = RunnableParallel(
+         nutrition=generate_nutrition_info_chain(llm),
+         shopping_list=generate_shopping_list_chain(llm),
+         factoids=generate_factoids_chain(llm),
+         recipe=RunnablePassthrough()
+     )
+    
     outputs = []
 
-    for i, res in enumerate(results, start=1):
+    for i, recipe in enumerate(results, start=1):
+        output = chain.invoke({"text": recipe.page_content, "metadata": recipe.metadata})
         processed_output = {
-            "recipe": res.page_content,
-            "metadata": res.metadata
+            "nutrition": output["nutrition"],
+            "shopping_list": output["shopping_list"],
+            "factoids": output["factoids"],
+            "recipe": output["recipe"]
         }
         outputs.append(processed_output)
 
