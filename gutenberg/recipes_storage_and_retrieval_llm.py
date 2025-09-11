@@ -597,7 +597,8 @@ def build_outputs(results: List[Document], llm) -> List[dict]:
             "nutrition": output["nutrition"],
             "shopping_list": output["shopping_list"],
             "factoids": output["factoids"],
-            "recipe": output["recipe"]
+            "recipe": output["recipe"],
+            "metadata": recipe.metadata
         }
         outputs.append(processed_output)
 
@@ -613,7 +614,8 @@ def generate_nutrition_info_chain(llm):
     """
     return ChatPromptTemplate.from_template (
          """You are a nutrition assistant. Given a list of ingredients, estimate the total
-         calories, protein, carbs, and fat. Return only a single valid JSON object in this format.
+         calories, protein, carbs, and fat. If there are servings for the recipe, divide up
+         the nutritional totals by the amount of servings. Return only a single valid JSON object in this format.
       
          {text}"""
      ) | llm | StrOutputParser()
