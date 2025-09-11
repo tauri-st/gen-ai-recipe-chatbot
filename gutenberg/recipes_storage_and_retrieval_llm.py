@@ -751,6 +751,9 @@ def main():
         for i, res in enumerate(results, start=1):
             print(f"\n[Result {i}] Recipe: {res['recipe']}")
             print(f"[Metadata] {res['metadata']}")
+            print(f"[Nutrition] {res['nutrition']}")
+            print(f"[Shopping List] {res['shopping_list']}")
+            print(f"[Factoids] {res['factoids']}")
             print("-" * 70)
 
 
