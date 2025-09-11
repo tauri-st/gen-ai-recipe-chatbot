@@ -593,6 +593,44 @@ def build_outputs(results, llm):
     return outputs
 
 ###############################################################################
+# LLM CHAINS
+###############################################################################
+
+def generate_nutrition_info_chain(llm):
+    """
+    Calculate estimated calories and macronutrients.
+    """
+    return ChatPromptTemplate.from_template (
+         """You are a nutrition assistant. Given a list of ingredients, estimate the total
+         calories, protein, carbs, and fat. Return only a single valid JSON object in this format.
+      
+         {text}"""
+     ) | llm | StrOutputParser()
+
+def generate_shopping_list_chain(llm):
+    """
+    Generate shopping list of ingredients.
+    """
+    return ChatPromptTemplate.from_template (
+         """You are a shopping assistant. Given a recipe, organize the ingredients into a shopping list 
+         with quantaties included and organize the ingredients based on sections of a grocery store. 
+         Return only a single valid JSON object in this format.
+      
+         {text}"""
+     ) | llm | StrOutputParser()
+
+def generate_factoids_chain(llm):
+    """
+    Generate fun factoids about recipes.
+    """
+    return ChatPromptTemplate.from_template (
+         """You are a food content creator. Given a recipe, generate fun factoids from history and pop culture. 
+         Return only a single valid JSON object in this format.
+      
+         {text}"""
+     ) | llm | StrOutputParser()
+
+###############################################################################
 # MAIN
 ###############################################################################
 
