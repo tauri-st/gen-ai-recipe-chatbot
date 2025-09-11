@@ -18,7 +18,10 @@ from langchain.retrievers.self_query.base import SelfQueryRetriever
 from langchain_core.messages import AIMessage, SystemMessage, HumanMessage
 from langchain_community.query_constructors.supabase import SupabaseVectorTranslator
 from langchain.chains.query_constructor.base import StructuredQueryOutputParser, get_query_constructor_prompt
-
+from langchain_core.runnables import RunnableParallel, RunnablePassthrough
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from typing import List
 
 # Supabase
 from supabase import create_client, Client
