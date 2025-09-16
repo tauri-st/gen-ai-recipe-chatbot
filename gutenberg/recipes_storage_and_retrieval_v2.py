@@ -583,11 +583,11 @@ def perform_self_query_retrieval(query, llm, vector_store, structured_query_tran
 def build_outputs(results: List[Document], llm) -> List[dict]:
     
     chain = RunnableParallel(
-         nutrition=generate_nutrition_info_chain(llm),
-         shopping_list=generate_shopping_list_chain(llm),
-         factoids=generate_factoids_chain(llm),
-         recipe=RunnablePassthrough()
-     )
+        nutrition=generate_nutrition_info_chain(llm),
+        shopping_list=generate_shopping_list_chain(llm),
+        factoids=generate_factoids_chain(llm),
+        recipe=RunnablePassthrough()
+    )
     
     outputs = []
 
@@ -598,7 +598,7 @@ def build_outputs(results: List[Document], llm) -> List[dict]:
             "shopping_list": output["shopping_list"],
             "factoids": output["factoids"],
             "recipe": output["recipe"],
-            "metadata": recipe.metadata
+            # "metadata": recipe.metadata
         }
         outputs.append(processed_output)
 
@@ -658,7 +658,7 @@ def main():
     parser.add_argument("-ed", "--end_date", type=str, default="2000-12-31", help="Search end date.")
     parser.add_argument("-q", "--query", type=str, default="Find Poached Eggs Recipes.", help="Query to perform.")
     parser.add_argument("-ss", "--use_similarity_search", action="store_true", help="Use similarity search.")
-    parser.add_argument("-sr", "--use_self_query_retrieval", action="store_true", help="Use self query retrieval.")
+    parser.add_argument("-sq", "--use_self_query_retrieval", action="store_true", help="Use self query retrieval.")
     
     # Parse the arguments
     args = parser.parse_args()
@@ -706,8 +706,8 @@ def main():
     recipes_vector_store = SupabaseVectorStore(
         client=supabase_client,
         embedding=embeddings,  
-        table_name="recipes_llm",
-        query_name="match_recipes_llm"
+        table_name="recipes_v2",
+        query_name="match_recipes_v2"
     )
 
     cache = GutenbergCache.get_cache()
@@ -751,8 +751,8 @@ def main():
         print(f"\nNo results found for query: {query}")
     else:
         for i, res in enumerate(results, start=1):
-            print(f"\n[Result {i}] Recipe: {res['recipe']}")
-            print(f"[Metadata] {res['metadata']}")
+            print(f"\n[Result {i}] Recipe: {res['recipe']['text']}")
+            print(f"[Metadata] {res['recipe']['metadata']}")
             print(f"[Nutrition] {res['nutrition']}")
             print(f"[Shopping List] {res['shopping_list']}")
             print(f"[Factoids] {res['factoids']}")

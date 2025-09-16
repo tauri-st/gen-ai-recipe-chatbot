@@ -46,7 +46,7 @@ CUISINE = ["italian", "french", "german", "australian", "english",  "american", 
 
 SPECIAL_CONSIDERATIONS = ["vegetarian", "vegan", "keto", "nut-free", "dairy-free", "gluten-free", "low-carb"]   
 
-# Global for spaCy NLP (natural language processing) model
+# Global for spaCy NLP model
 nlp = None
 
 ###############################################################################
@@ -87,22 +87,20 @@ def search_gutenberg_titles(cache, keywords, top_n=10, start_date=None, end_date
 
 def extract_metadata_nlp(content):
     """
-    Use NLP to extract recipe-related metadata from the text content using the constants COMMON_INGREDIENTS, RECIPE_TYPE, CUISINE, and SPECIAL_CONSIDERATIONS.
+    Use NLP to extract recipe-related metadata from the text content, including a focused list of ingredients.
     """
-
     # Tokenize and process text with spaCy
     doc = nlp(content)
- 
+
     # Extract nouns and proper nouns (potential ingredients)
     possible_ingredients = [
         token.text.lower() for token in doc
-        # If token has the attributes of being the part of speech category noun or proper noun and consists of alphabetical letters
         if token.pos_ in {"NOUN", "PROPN"} and token.is_alpha
     ]
 
     # Filter using the predefined ingredients list
     ingredients = [ingredient for ingredient in possible_ingredients if ingredient in COMMON_INGREDIENTS]
- 
+
     # Deduplicate and sort the list of ingredients
     ingredients = sorted(set(ingredients))
 
@@ -114,11 +112,11 @@ def extract_metadata_nlp(content):
     }
     return metadata
 
+
 def construct_metadata(gutenberg_book_id, cache):
     """
     Build minimal metadata from Gutenberg's cache to attach to each recipe.
     """
-
     query = f"""
         SELECT 
             b.gutenbergbookid AS gutenbergbookid,
@@ -141,7 +139,7 @@ def construct_metadata(gutenberg_book_id, cache):
     result = None
     for row in cursor:
         result = row  # Assuming one row is returned per book_id
- 
+
     # Ensure result exists
     if not result:
         print(f"No metadata found for book ID {gutenberg_book_id}.")
@@ -151,7 +149,7 @@ def construct_metadata(gutenberg_book_id, cache):
             "authors": [],
             "subjects": []
         }
-    
+
     gutenberg_id, dateissued, title, authors, subjects = result
     if authors is None:
         authors = "Unknown"
@@ -231,7 +229,7 @@ def perform_similarity_search(query, llm, vector_store):
     Perform retrieval with a single query.
     """
     recipes = vector_store.similarity_search(query)
- 
+
     return build_outputs(recipes, llm)
 
 ###############################################################################
@@ -275,7 +273,7 @@ def perform_self_query_retrieval(query, llm, vector_store):
             type="list[string]",
         ),
     ]
- 
+
     doc_content_desc = "Text content describing a cooking recipe"
     document_contents = "The text content of a cooking recipe, including its ingredients, instructions, and relevant metadata."
 
@@ -284,7 +282,7 @@ def perform_self_query_retrieval(query, llm, vector_store):
         vector_store,
         doc_content_desc,
         metadata_field_info,
-        verbose=True # See the retriever's thought process
+        verbose=True
     )
 
     results = retriever.invoke(query)
@@ -293,14 +291,14 @@ def perform_self_query_retrieval(query, llm, vector_store):
 
 def build_outputs(results, llm):
     outputs = []
- 
+
     for i, res in enumerate(results, start=1):
         processed_output = {
             "recipe": res.page_content,
             "metadata": res.metadata
         }
         outputs.append(processed_output)
- 
+
     return outputs
 
 ###############################################################################
@@ -325,7 +323,7 @@ def main():
     
     # Set default behavior: use similarity search if neither is specified
     if not args.use_similarity_search and not args.use_self_query_retrieval:
-       args.use_similarity_search = True
+        args.use_similarity_search = True
 
     top_n = args.top_n
     start_date = args.start_date
@@ -371,8 +369,8 @@ def main():
     vector_store = SupabaseVectorStore(
         client=supabase_client,
         embedding=embeddings,
-        table_name="recipes_v2",
-        query_name="match_recipes_v2"
+        table_name="recipes",
+        query_name="match_recipes"
     )
 
     # Initialize Gutenberg cache

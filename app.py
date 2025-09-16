@@ -33,7 +33,7 @@ from gutenberg.books_storage_and_retrieval import (
    perform_retrieval_qa as perform_books_retrieval_qa,
 )
 
-from gutenberg.recipes_storage_and_retrieval_llm import (
+from gutenberg.recipes_storage_and_retrieval_v2 import (
     perform_similarity_search as perform_recipes_similarity_search,
     perform_self_query_retrieval as perform_recipes_self_query_retrieval,
 )
