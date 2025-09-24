@@ -579,7 +579,7 @@ def perform_self_query_retrieval(query, llm, vector_store, structured_query_tran
  
     return build_outputs(recipes, llm)
 
-def perform_multi_query_retrieval(query, llm, vector_store, structure_query_translator):
+def perform_multi_query_retrieval(query, llm, vector_store, structured_query_translator):
     """
     Creates a MultiQueryRetriever to expand the user query into multiple variations
     and retrieves the most relevant recipes from the vector store using multi-query expansion,
