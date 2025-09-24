@@ -697,12 +697,13 @@ def main():
     parser.add_argument("-q", "--query", type=str, default="Find Poached Eggs Recipes.", help="Query to perform.")
     parser.add_argument("-ss", "--use_similarity_search", action="store_true", help="Use similarity search.")
     parser.add_argument("-sq", "--use_self_query_retrieval", action="store_true", help="Use self query retrieval.")
+    parser.add_argument("-mq", "--use_multi_query", action="store_true", help="Use multi-query retrieval.")
     
     # Parse the arguments
     args = parser.parse_args()
         
     # Set default behavior: use similarity search if neither is specified
-    if not args.use_similarity_search and not args.use_self_query_retrieval:
+    if not args.use_similarity_search and not args.use_self_query_retrieval and not args.use_multi_query:
        args.use_similarity_search = True
     
     top_n = args.top_n
@@ -781,6 +782,9 @@ def main():
     elif args.use_self_query_retrieval:
         print(f"\nSelf-query retrieval with: {query}")
         results = perform_self_query_retrieval(query, chat_llm, recipes_vector_store, SupabaseVectorTranslator())
+    elif args.use_multi_query:
+        print(f"\nMulti-query retrieval with: {query}")
+        results = perform_multi_query_retrieval(query, chat_llm, recipes_vector_store, SupabaseVectorTranslator())
     # =================================================================== #
 
     # Print out the results
