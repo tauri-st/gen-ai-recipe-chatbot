@@ -36,6 +36,7 @@ from gutenberg.books_storage_and_retrieval import (
 from gutenberg.recipes_storage_and_retrieval_v2 import (
     perform_similarity_search as perform_recipes_similarity_search,
     perform_self_query_retrieval as perform_recipes_self_query_retrieval,
+    perform_multi_query_retrieval as perform_recipes_multi_query_retrieval,
 )
 
 # Load environment variables from a .env file
@@ -178,6 +179,23 @@ def create_recipes_self_query_tool():
     
     return get_recipes_self_query
 
+# Multi-Query Retrieval (Recipes)
+def create_recipes_multi_query_tool():
+    @tool
+    def get_recipes_multi_query(input: str) -> str:
+        """
+        Tool for searching recipes with metadata-based self-query retrieval. (E.g. filter by recipe_type, cuisine, special_considerations, etc.)
+        And for using multi-query retrieval to generate multiple versions of the user’s question from different perspectives.
+        """
+
+        query = input.strip()
+
+        results = perform_recipes_multi_query_retrieval(query, chat_llm, recipes_vector_store, SupabaseVectorTranslator())
+        # Typically returns a dict with 'answer', 'sources', 'source_documents', etc.
+        return json.dumps(results, default=str)
+    
+    return get_recipes_multi_query
+
 # Routes
 # Index route
 @app.route("/", methods=["GET"])
@@ -194,6 +212,7 @@ def stream():
     books_similarity_search_tool = create_books_similarity_search_tool()
     recipes_similarity_search_tool = create_recipes_similarity_search_tool()
     recipes_self_query_tool = create_recipes_self_query_tool()
+    recipes_multi_query_tool = create_recipes_multi_query_tool()
 
     graph = create_react_agent(
         model=chat_llm,
@@ -202,6 +221,7 @@ def stream():
             books_similarity_search_tool,
             recipes_similarity_search_tool,
             recipes_self_query_tool,
+            recipes_multi_query_tool,
         ],
         checkpointer=memory,
         debug=True
