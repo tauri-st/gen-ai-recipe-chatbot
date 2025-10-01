@@ -1,7 +1,7 @@
 import unittest
 import json
 from unittest.mock import MagicMock
-from gutenberg.recipes_storage_and_retrieval_llm import (
+from gutenberg.recipes_storage_and_retrieval_v2 import (
     generate_nutrition_info_chain,
 )
 
