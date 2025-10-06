@@ -197,6 +197,37 @@
       <!-- SSE messages get appended here -->
     </section>
 
+    <!-- Recipe card template - will be cloned by JavaScript and populated with recipe data. -->
+    <template id="recipe-card-template">
+      <article class="recipe-card">
+        <div class="recipe-header">
+          <h3 class="recipe-title"></h3>
+          <div class="recipe-metadata">
+            <span class="recipe-type"></span>
+            <span class="recipe-cuisine"></span>
+            <span class="recipe-special-considerations"></span>
+          </div>
+        </div>
+        <div class="recipe-content">
+          <div class="recipe-info-panel">
+            <h4>Ingredients</h4>
+            <div class="recipe-ingredients"></div>
+          </div>
+          <div class="recipe-instructions">
+            <h4>Instructions</h4>
+            <div class="instructions-content"></div>
+          </div>
+        </div>
+        <div class="recipe-footer">
+           <button class="source-info-toggle" aria-expanded="true">Hide Source</button>
+        </div>
+        <div class="source-info-panel">
+          <h4>Source Information</h4>
+          <div class="source-content"></div>
+      </article>
+    </template>
+
+
     <section class="message-input-container">
       <form class="message-form" onsubmit="event.preventDefault(); sendQuery();">
         <div class="input-wrapper">
