@@ -1406,9 +1406,15 @@ console.log(`Processed ${recipeCount} recipe messages out of ${assistantMessages
 
 // TODO: Create recipe card from template
 function createRecipeCard(recipeData) {
-  // TODO: Get template
+  // Get template
+  const template = document.getElementById('recipe-card-template');
+  if (!template) {
+    console.error('Recipe card template not found');
+    return document.createTextNode('Error: Template not found');
+  }
 
-  // TODO: Clone the template content
+  // Clone the template content
+  const card = document.importNode(template.content, true);
 
   // Add margins to all text content elements to prevent text overflow
   const textElements = card.querySelectorAll('p, li, h3, h4');
@@ -1421,9 +1427,10 @@ function createRecipeCard(recipeData) {
     el.style.maxWidth = "100%";
   });
 
-  // TODO: Update the recipe card template
+  // Update the recipe card template
   try {
-    // TODO: Extract recipe information
+    // Extract recipe information
+    let recipe = recipeData.recipe || recipeData;
 
     // Clean up title by removing numbering prefixes and any **
     let title = recipe.metadata?.recipe_title || 'Recipe';
@@ -1476,9 +1483,42 @@ function createRecipeCard(recipeData) {
       }
     }
 
-    // TODO: Populate ingredients
+    // Populate ingredients
+    const ingredientsContainer = card.querySelector('.recipe-ingredients');
+    if (ingredientsContainer) {
+      const ingredients = recipe.metadata?.ingredients || [];
+      if (Array.isArray(ingredients) && ingredients.length > 0) {
+        const ul = document.createElement('ul');
+        ingredients.forEach(ing => {
+          const li = document.createElement('li');
+          li.textContent = ing;
+          ul.appendChild(li);
+        });
+        ingredientsContainer.appendChild(ul);
+      } else {
+        // Try to extract ingredients from text
+        const ingredientsSection = extractSection(recipe.text, 'Ingredients');
+        if (ingredientsSection) {
+          ingredientsContainer.innerHTML = marked.parse(ingredientsSection);
+        } else {
+          ingredientsContainer.textContent = 'No ingredients listed';
+        }
+      }
+    }
 
-    // TODO: Add instructions
+    // Add instructions
+    const instructionsContent = card.querySelector('.instructions-content');
+    if (instructionsContent) {
+      // Try to extract instructions from recipe text
+      const instructionsSection = extractSection(recipe.text, 'Instructions');
+      let instructionsText = '';
+      
+      if (instructionsSection) {
+        instructionsText = instructionsSection;
+      } else {
+        // Fallback to full text if no specific instructions section
+        instructionsText = recipe.text || '';
+      }
 
     // Clean up instructions before rendering
     // Handle escaped newlines
