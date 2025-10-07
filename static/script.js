@@ -1604,7 +1604,7 @@ function createRecipeCard(recipeData) {
     // Return the card
     return card;
 
-    // TODO: Catch any errors and print a message in a div within the recipe card
+    // Catch any errors and print a message in a div within the recipe card
     } catch (e) {
     console.error('Error creating recipe card:', e);
     const errorDiv = document.createElement('div');
