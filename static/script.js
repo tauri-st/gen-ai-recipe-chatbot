@@ -1020,7 +1020,12 @@ function extractIngredients(text) {
   return ingredients.length > 0 ? ingredients : [];
 }
 
-// TODO: Define toggleView on the window object to ensure it's accessible globally
+// Define toggleView on the window object for global accessibility
+window.toggleView = function(isChecked) {
+  console.log("Toggle view called with:", isChecked);
+  const mode = isChecked ? 'card' : 'text';
+  // Call switchView directly on window to ensure we're using the global function
+  window.switchView(mode);
 
 // TODO: Function to switch between views
 
