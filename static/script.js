@@ -20,8 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const chatContainer = document.querySelector('.chat-container');
 
   // Set up window control buttons to minimize the chat window
-
-  // Set up window control buttons to close the chat window
   if (minimizeBtn) {
     minimizeBtn.addEventListener('click', function() {
       // Toggle minimized state
@@ -40,6 +38,9 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+
+  // Set up window control buttons to close the chat window
+  
 
   // Make chat window draggable
   const chatHeader = document.querySelector('.chatbot-header');
