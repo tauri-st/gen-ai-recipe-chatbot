@@ -8,7 +8,11 @@ window.parsedRecipes = []; // Store parsed recipe data
 document.addEventListener('DOMContentLoaded', function () {
   console.log('DOM loaded, initializing view controls');
 
-  // TODO: Initialize the toggle view switch
+  // Initialize the toggle view switch
+  const viewToggleCheckbox = document.getElementById('view-toggle-checkbox');
+  if (viewToggleCheckbox) {
+    viewToggleCheckbox.checked = currentViewMode === 'card';
+  }
 
   // TODO: Initialize view toggle buttons in the index.html template
 
