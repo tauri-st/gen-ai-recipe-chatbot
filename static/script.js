@@ -14,11 +14,32 @@ document.addEventListener('DOMContentLoaded', function () {
     viewToggleCheckbox.checked = currentViewMode === 'card';
   }
 
-  // TODO: Initialize view toggle buttons in the index.html template
+  // Initialize view toggle buttons in the index.html template
+  const minimizeBtn = document.getElementById('minimize-btn');
+  const closeBtn = document.getElementById('close-btn');
+  const chatContainer = document.querySelector('.chat-container');
 
-  // TODO: Set up window control buttons to minimize the chat window
+  // Set up window control buttons to minimize the chat window
 
-  // TODO: Set up window control buttons to close the chat window
+  // Set up window control buttons to close the chat window
+  if (minimizeBtn) {
+    minimizeBtn.addEventListener('click', function() {
+      // Toggle minimized state
+      if (chatContainer) {
+        if (chatContainer.classList.contains('minimized')) {
+          // Restore window
+          chatContainer.classList.remove('minimized');
+          minimizeBtn.querySelector('img').src = minimizeBtn.querySelector('img').src.replace('open-icon.png', 'open-icon.png');
+          minimizeBtn.querySelector('.visually-hidden').textContent = 'minimize';
+        } else {
+          // Minimize window
+          chatContainer.classList.add('minimized');
+          minimizeBtn.querySelector('img').src = minimizeBtn.querySelector('img').src.replace('open-icon.png', 'open-icon.png');
+          minimizeBtn.querySelector('.visually-hidden').textContent = 'restore';
+        }
+      }
+    });
+  }
 
   // Make chat window draggable
   const chatHeader = document.querySelector('.chatbot-header');
