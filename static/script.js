@@ -40,7 +40,20 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Set up window control buttons to close the chat window
-  
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function() {
+      // Hide the chat container and view toggle
+      if (chatContainer) {
+        chatContainer.classList.add('hidden');
+                
+        // Show the chat agent button in the header
+        const chatAgentBtn = document.getElementById('chat-agent-btn');
+        if (chatAgentBtn) {
+          chatAgentBtn.classList.remove('hidden');
+        }
+      }
+    });
+  }
 
   // Make chat window draggable
   const chatHeader = document.querySelector('.chatbot-header');
@@ -103,7 +116,20 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // TODO: Set up chat agent button in header. Listen for clicks to show chat window and hide button in header
+  // Set up chat agent button in header. Listen for clicks to show chat window and hide button in header
+  const chatAgentBtn = document.getElementById('chat-agent-btn');
+  if (chatAgentBtn) {
+    chatAgentBtn.addEventListener('click', function () {
+      // Show chat container and view toggle
+      if (chatContainer) {
+        chatContainer.classList.remove('hidden');
+        chatContainer.classList.remove('minimized');
+ 
+        // Hide the chat agent button
+        chatAgentBtn.classList.add('hidden');
+      }
+    });
+  }
 
   // Override the default sendQuery function with our enhanced version
   // Function also exists in the index.html template
