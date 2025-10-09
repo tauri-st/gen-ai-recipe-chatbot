@@ -1026,6 +1026,12 @@ window.toggleView = function(isChecked) {
   const mode = isChecked ? 'card' : 'text';
   // Call switchView directly on window to ensure we're using the global function
   window.switchView(mode);
+  // Update the checkbox state if it was changed programmatically
+  const checkbox = document.getElementById('view-toggle-checkbox');
+  if (checkbox && checkbox.checked !== isChecked) {
+    checkbox.checked = isChecked;
+  }
+};
 
 // TODO: Function to switch between views
 
