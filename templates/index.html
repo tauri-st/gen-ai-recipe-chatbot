@@ -131,11 +131,19 @@
 
 
     <section class="message-input-container">
-      <form class="message-form" onsubmit="event.preventDefault(); sendQuery();">
+      <form class="message-form" onsubmit="event.preventDefault(); sendQuery(); return false;">
         <div class="input-wrapper">
           <label for="query" class="visually-hidden">Ask ChefBoost</label>
           <textarea id="query" placeholder="Ask ChefBoost..." autofocus required></textarea>
-          <button type="submit" id="send-btn">
+          <div class="view-toggle">
+            <label class="toggle-switch visually-hidden">
+              <span class="visually-hidden">Toggle switch</span>
+              <input type="checkbox" id="view-toggle-checkbox" onclick="window.toggleView(this.checked)">
+              <span class="slider"></span>
+            </label>
+            <span class="toggle-label">Cards</span>
+          </div>
+          <button type="submit" id="send-btn" onclick="event.preventDefault(); event.stopPropagation(); sendQuery(); return false;">
             <img src="{{ url_for('static', filename='send-icon.png') }}" alt="Send" class="send-icon">
             <span class="visually-hidden">Send prompt</span>
           </button>
