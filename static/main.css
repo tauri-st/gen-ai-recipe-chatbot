@@ -1,4 +1,6 @@
 /* These are CSS variables. They allow you to change the theme of the chatbot by replacing the values. Read more about them here: https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties */
+
+/* Global styles */
 :root {
   --primary-color: #FFFFFF;
   --secondary-color: #000000;
@@ -8,7 +10,6 @@
   --border-radius: 15px;
   --primary-font-family: "Mulish", sans-serif;
   --secondary-font-family: "Nunito", sans-serif;
-
 }
 
 figure {
@@ -46,6 +47,25 @@ h1 {
   font-size: 1.5rem;
 }
 
+.hidden {
+  display: none !important;
+}
+
+/* Visually hide words associated with icons for accessibility */
+.visually-hidden {
+  /* Hides the text for the submit button while making it accessible to screen readers */
+  display: inline-block;
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
+
+/* Site header */
 .site-header {
   top: 0;
   width: 100%;
@@ -66,10 +86,15 @@ h1 {
   padding-bottom: 20px;
 }
 
+.header-content-wrapper figure {
+  width: 100%;
+  text-align: center;
+}
+
 .site-header .logo {
   height: 35px;
   line-height: 0;
-  margin: 30px 0 20px 0;
+  margin: 30px 0 10px 0;
 }
 
 .user-info {
@@ -80,42 +105,103 @@ h1 {
 
 .user-info img {
   width: 35px;
+  margin-right: 10px;
+  /* Add space between the image and links */
 }
 
 .user-info p {
   margin: 0 20px;
 }
 
-.chat-container {
-  max-width: 800px;
-  width: 100%;
+.user-info a {
+  margin: 0 10px;
+  /* Adjust the space as needed */
+  text-decoration: none;
+  /* Optional: To clean up the underline */
+  color: inherit;
+  /* Match text color with the rest of the header */
+}
+
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  background-color: #ffa6de;
+  color: #000;
+  border-radius: 50%;
   display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  overflow-y: auto;
-  box-sizing: border-box;
-  justify-content: space-between;
-  border: var(--borders);
-  border-radius: var(--border-radius);
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* ChefBoost main section */
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url('joanie-simon-2r8BzVYZIeo-unsplash.png'), #f5e4f0;
+  background-size: cover;
+  background-position: center;
+  height: calc(100vh - 50px);
+}
+
+.main-content-wrapper {
+  display: flex;
+  flex-direction: row;
+  height: 70vh;
+  /* Allow scrolling within this container */
+  overflow: auto;
+  align-items: flex-start;
+  justify-content: center;
+  width: 95%;
+  max-width: 1400px;
   margin-bottom: 50px;
+}
+
+/* Chat container */
+.chat-container {
+  /* Need max-width to maintain size of container when empty */
+  max-width: 100%;
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  margin-bottom: 0;
+  /* Make chat window resizable */
+  resize: both;
+  min-width: 300px;
+  min-height: 400px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 70vh;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .chatbot-content-wrapper {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  /* Align title to left */
   width: 90%;
+  position: relative;
+  /* For header positioning */
+  box-sizing: border-box;
 }
 
 .chatbot-header {
   background-color: var(--tertiary-color);
   display: flex;
-  justify-content: center;
-}
-
-.window-controls {
-  display: flex;
+  flex-direction: column;
   align-items: center;
+  grid-row: 1 / 2;
+  padding: 10px 0;
+  position: relative;
+  /* For positioning the control buttons */
 }
 
 .chatbot-header button {
@@ -132,13 +218,16 @@ h1 {
 .chatbot-header h2 {
   font-size: 1.5rem;
   color: var(--secondary-color);
+  margin-left: 0;
+  margin-right: auto;
+  text-align: left;
 }
 
+/* Chat container messages */
 .user-message,
 .assistant-message {
   padding: 12px 16px;
   margin-bottom: 8px;
-  max-width: 80%;
   word-wrap: break-word;
 }
 
@@ -147,7 +236,6 @@ h1 {
   background-color: var(--user-block);
   border-radius: var(--border-radius);
   position: relative;
-
 }
 
 .user-message:after {
@@ -194,27 +282,47 @@ h1 {
 
 .message-input-container {
   position: relative;
-  /* Match the chat container's width */
   width: 100%;
   background: var(--primary-color);
   box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: start;
-  /* z-index: 100; */
-  /* margin-top: 20px; */
-  /* border: var(--border-input); */
-  /* border-radius: var(--border-radius); */
-  padding-bottom: 40px;
+  z-index: 200;
+  /* Very high z-index to ensure interaction */
+  padding-bottom: 15px;
+  padding-top: 15px;
+  pointer-events: auto !important;
+  /* Force pointer events */
+  grid-row: 3 / 4;
+  border-top: 1px solid #eee;
 }
 
-.message-input-container form {
-  /* display: flex; */
-  /* width: 97%; */
-  /* padding: 10px 0; */
-  /* border-radius: var(--border-radius); */
+.message-role {
+  align-self: flex-start;
+  margin-top: 20px;
+  margin-bottom: 4px;
 }
 
+.message-role.user {
+  align-self: flex-end;
+}
+
+.messages {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: var(--primary-color);
+  grid-row: 2 / 3;
+  min-height: 0;
+  /* Important for proper scrolling in grid */
+  height: 100%;
+}
+
+/* Chat container input area */
 form {
   max-width: 600px;
   width: 100%;
@@ -245,6 +353,11 @@ input[type="button"] {
   margin: 0 2px;
 }
 
+.button-group {
+  /* background-color: var(--secondary-color); */
+  border-radius: 0 10px 10px 0;
+}
+
 #send-btn {
   width: 40px;
   height: 54px;
@@ -256,182 +369,18 @@ input[type="button"] {
   width: 20px;
 }
 
-.message-role {
-  align-self: flex-start;
-  margin-top: 20px;
-  margin-bottom: 4px;
-}
-
-.message-role.user {
-  align-self: flex-end;
-}
-
-main {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  background: url('joanie-simon-2r8BzVYZIeo-unsplash.png'), #f5e4f0;
-  background-size: cover;
-  background-position: center;
-  height: calc(100vh - 50px);
-}
-
-.main-content-wrapper {
-  display: flex;
-  flex-direction: row;
-  height: 70vh;
-  /* Allow scrolling within this container */
-  overflow: auto;
-  align-items: stretch;
-  justify-content: center;
-  width: 90%;
-  max-width: 1400px;
-}
-
-.messages {
-  flex-grow: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 20px;
-  background-color: var(--primary-color);
-}
-
-.hidden {
-  display: none;
-}
-
-/* Login Page */
-
-.login-form {
-  display: flex;
-  flex-direction: row;
-  overflow: auto;
-  align-items: center;
-  justify-content: center;
-  width: 90%;
-  max-width: 1400px;
-  margin-bottom: 35px;
-}
-
-.login-content-wrapper {
-  max-width: 800px;
-  width: 100%;
-  display: flex;
-  flex-flow: row wrap;
-  box-sizing: border-box;
-  justify-content: center;
-  border: var(--borders);
-  border-radius: var(--border-radius);
-  background-color: var(--tertiary-color);
-  padding: 50px 30px;
-}
-
-.login-form h2 {
-  font-size: 2rem;
-}
-
-.login-form p {
-  line-height: 2;
-  font-size: 1.5rem;
-  text-align: center;
-  margin: 0;
-  /* check width of text */
-}
-
-.login-form .subtext {
-  font-size: 1rem;
-}
-
-.auth-form-content-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-flow: row wrap;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-  width: 100%;
-}
-
-.form-group label {
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.form-group input {
-  padding: 20px;
-  border: transparent;
-  border-radius: 50px;
-}
-
-.btn {
-  width: 60%;
-  background-color: var(--secondary-color);
-  color: var(--primary-color);
-  padding: 20px;
-  border: transparent;
-  border-radius: 50px;
-  font-size: 1.5rem;
-}
-
-/* Visually hide words associated with icons for accessibility */
-.visually-hidden {
-  /* Hides the text for the submit button while making it accessible to screen readers */
-  display: inline-block;
-  position: absolute;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  width: 1px;
-  margin: -1px;
-  padding: 0;
-  border: 0;
-}
-
-.user-info a {
-  margin: 0 10px;
-  /* Adjust the space as needed */
-  text-decoration: none;
-  /* Optional: To clean up the underline */
-  color: inherit;
-  /* Match text color with the rest of the header */
-}
-
-.user-info img {
-  margin-right: 10px;
-  /* Add space between the image and links */
-}
-
-.avatar-circle {
-  width: 40px;
-  height: 40px;
-  background-color: #ffa6de;
-  /* Pink Background */
-  color: #000;
-  /* Black Text */
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
 /* Chat input container */
 .message-input-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 10px 15px;
   background-color: #fff;
   /* White background for the input */
   border-top: 1px solid #ccc;
+  width: 100%;
+  /* Ensure container takes full width */
+  box-sizing: border-box;
 }
 
 .message-form {
@@ -439,6 +388,7 @@ main {
   justify-content: center;
   align-items: center;
   width: 100%;
+  max-width: 100%;
 }
 
 .input-wrapper {
@@ -449,7 +399,8 @@ main {
   border-radius: 10px;
   overflow: hidden;
   width: 100%;
-  max-width: 600px;
+  max-width: 100%;
+  /* Allow full width scaling */
 }
 
 .input-wrapper textarea {
@@ -461,19 +412,28 @@ main {
   outline: none;
   height: 40px;
   background-color: #f7f7f7;
+  min-width: 100px;
 }
 
 #send-btn {
   background-color: #2d2d2d;
   /* Black background for button */
   border: none;
-  padding: 10px;
-  cursor: pointer;
+  padding: 10px 15px;
+  cursor: pointer !important;
   border-radius: 0 10px 10px 0;
   /* Rounded on the right side */
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  z-index: 201;
+  /* Higher than the container */
+  pointer-events: auto !important;
+  flex-shrink: 0;
+  /* Prevent shrinking */
+  height: 100%;
+  /* Match height of input area */
 }
 
 #send-btn .send-icon {
@@ -519,7 +479,499 @@ main {
   overflow-x: auto;
 }
 
-@media screen and (min-width: 768px) {
+/* Chatbot controls styles */
+.chatbot-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+  z-index: 100;
+  /* Higher z-index to ensure buttons can be clicked */
+}
+
+.window-controls {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  z-index: 110;
+  /* Even higher z-index for window controls */
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  /* Vertically center with title */
+}
+
+/* Toggle switch for view mode */
+.view-toggle {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  white-space: nowrap;
+  /* Prevent wrapping */
+  flex-shrink: 0;
+  /* Prevent shrinking */
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked+.slider {
+  background-color: var(--tertiary-color);
+}
+
+input:checked+.slider:before {
+  transform: translateX(26px);
+}
+
+.toggle-label {
+  margin-left: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Minimized chat container */
+.chat-container.minimized {
+  height: 80px !important;
+  min-height: 60px;
+  overflow: hidden;
+}
+
+.chat-container.minimized .messages,
+.chat-container.minimized .message-input-container {
+  display: none;
+}
+
+/* Draggable chat container */
+.chat-container.dragging {
+  opacity: 0.8;
+  cursor: move;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  transition: none;
+}
+
+/* Header cursors to indicate draggability */
+.chatbot-header {
+  cursor: grab;
+}
+
+.chatbot-header:active {
+  cursor: grabbing;
+}
+
+/* Chat agent button in header */
+.chat-agent-btn {
+  display: flex;
+  align-items: center;
+  background-color: var(--tertiary-color);
+  border: none;
+  margin-bottom: 16px;
+  border-radius: 20px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-agent-btn:hover {
+  background-color: #ff93d2;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.chat-agent-btn img.chat-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.chat-agent-btn span {
+  font-family: var(--primary-font-family);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Recipe container styles - for multiple recipes */
+.recipe-container {
+  margin: 15px 0;
+  padding: 5px 0;
+  border-top: 1px dashed #ddd;
+}
+
+.recipe-container:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.recipe-info-panel {
+  margin-bottom: 15px;
+}
+
+.recipe-info-panel h4,
+.recipe-instructions h4 {
+  margin-top: 0;
+  color: var(--secondary-color);
+  border-bottom: 2px solid var(--tertiary-color);
+  padding-bottom: 5px;
+  padding-right: 5px;
+  margin-right: 5px;
+}
+
+.recipe-ingredients ul {
+  padding-left: 20px;
+  margin: 10px 0;
+  padding-right: 5px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.recipe-ingredients li {
+  margin-bottom: 5px;
+  padding-right: 5px;
+}
+
+.recipe-nutrition {
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.nutrition-content {
+  background-color: #f8f8f8;
+  padding: 10px;
+  border-radius: 5px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+}
+
+.recipe-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  border-top: 1px solid #eee;
+  background-color: #f5f5f5;
+  flex-wrap: wrap;
+  /* Allow buttons to wrap on small screens */
+  gap: 5px;
+  /* Add spacing between wrapped buttons */
+}
+
+.recipe-footer button,
+.source-info-toggle {
+  padding: 6px 12px;
+  border: none;
+  background: var(--secondary-color);
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background-color 0.2s;
+}
+
+.recipe-footer button:hover,
+.source-info-toggle:hover {
+  background-color: #333;
+}
+
+.source-info-panel {
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #eee;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+  width: 100%;
+  /* Ensure it takes full width */
+}
+
+.source-info-panel h4 {
+  margin-top: 0;
+  color: var(--secondary-color);
+}
+
+.source-content {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  padding: 0 5px;
+  width: 100%;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Modal styles for recipe details */
+.recipe-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  width: 80%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* Manual view switching */
+.assistant-message.text-view .recipe-card {
+  display: none !important;
+}
+
+/* Only hide markdown text for recipe messages in card view */
+.assistant-message.card-view[data-is-recipe="true"] .markdown-text,
+.assistant-message.card-view[data-recipe-index] .markdown-text,
+.assistant-message.card-view[data-recipe-indices] .markdown-text,
+.assistant-message.card-view[data-is-recipes="true"] .markdown-text {
+  display: none !important;
+}
+
+/* Force display of recipe cards when in card view */
+body.card-view-mode .assistant-message[data-is-recipe="true"] .recipe-card,
+body.card-view-mode .assistant-message[data-recipe-index] .recipe-card,
+body.card-view-mode .assistant-message[data-recipe-indices] .recipe-card,
+body.card-view-mode .assistant-message[data-is-recipes="true"] .recipe-card,
+body.card-view-mode .assistant-message .recipe-container .recipe-card {
+  display: block !important;
+}
+
+/* Important: Non-recipe messages should always show their text content, even in card view */
+body.card-view-mode .assistant-message:not([data-recipe-index]):not([data-recipe-indices]):not([data-is-recipe]):not([data-is-recipes]) .markdown-text {
+  display: block !important;
+}
+
+/* Force display of text when in text view */
+body.text-view-mode .assistant-message .markdown-text {
+  display: block !important;
+}
+
+/* Recipe card styles */
+.recipe-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 0 auto 15px auto;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  word-wrap: break-word;
+  /* Ensure text stays in bounds */
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+  /* Include padding in width calculation */
+}
+
+.recipe-header {
+  background: var(--tertiary-color);
+  padding: 12px;
+}
+
+.recipe-title {
+  margin: 0 0 5px 0;
+  font-size: 1.2rem;
+}
+
+.recipe-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.8rem;
+}
+
+.recipe-metadata span {
+  background: #fff;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-weight: bold;
+}
+
+.recipe-content {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 100%;
+  /* Ensure content uses full width of card */
+  overflow: hidden;
+  /* Prevent content from overflowing */
+  box-sizing: border-box;
+  /* Include padding in width calculation */
+  margin: 0;
+}
+
+/* Login/Signup/Account Page */
+.login-form {
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  max-width: 1400px;
+  margin-bottom: 35px;
+  border: var(--borders);
+  border-radius: var(--border-radius);
+  background-color: var(--tertiary-color);
+}
+
+.login-content-wrapper {
+  max-width: 800px;
+  width: 90%;
+  display: flex;
+  flex-flow: row wrap;
+  box-sizing: border-box;
+  justify-content: center;
+  padding: 50px 0;
+}
+
+.login-form h2 {
+  font-size: 1rem;
+  line-height: 1.5;
+  text-wrap: balance;
+  font-weight: normal;
+  text-align: center;
+}
+
+.login-form p {
+  line-height: 1.5;
+  font-size: 1.25rem;
+  text-align: center;
+  margin: 0;
+}
+
+.login-form .subtext {
+  font-size: 1rem;
+  margin: 2rem 0;
+}
+
+.auth-form-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: row wrap;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 75%;
+}
+
+.form-group label {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.form-group input {
+  padding: 20px;
+  border: transparent;
+  border-radius: 50px;
+  width: 75%;
+}
+
+.btn {
+  width: 75%;
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  padding: 20px;
+  border: transparent;
+  border-radius: 50px;
+  font-size: 1.5rem;
+  margin: 2rem 0;
+  cursor: pointer;
+}
+
+@media (min-width: 650px) {
+
+  .header-content-wrapper {
+    justify-content: space-between;
+  }
+
+  .header-content-wrapper figure {
+    width: 30%;
+  }
+
+  .site-header .logo {
+    margin: 30px 0 20px 0;
+  }
+
+  .login-form h2 {
+    width: 70%;
+  }
+
+  .login-form p {
+    width: 70%;
+  }
+
+  .form-group {
+    width: 60%;
+  }
+
+  .btn {
+    width: 60%;
+  }
+}
+
+@media (min-width: 768px) {
+
+  .site-header .logo {
+    margin: 30px 0 20px 0;
+  }
+
   h1 {
     font-size: 2rem;
   }
@@ -530,38 +982,85 @@ main {
     padding-bottom: 0;
   }
 
-  .chatbot-content-wrapper {
-    width: 75%;
-  }
-
-  .form-group {
-    width: 60%;
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  .main-content-wrapper {
-    justify-content: flex-end;
+  .login-form {
+    width: 65%;
   }
 
   .chat-container {
-    max-width: 500px;
+    max-width: 90%;
   }
 
   .chatbot-content-wrapper {
     width: 90%;
   }
 
+  .recipe-info-panel {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 5px;
+    border-right: 1px solid #eee;
+    box-sizing: border-box;
+    /* Include padding in width calculation */
+  }
+
+  .recipe-instructions {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 15px;
+    overflow-wrap: break-word;
+    /* Ensure text wraps */
+    word-break: normal;
+    box-sizing: border-box;
+    /* Include padding in width calculation */
+  }
+
+  .recipe-instructions ol,
+  .recipe-instructions ul {
+    padding-left: 25px;
+    padding-right: 15px;
+    margin: 10px 0;
+  }
+
+  .recipe-instructions li {
+    margin-bottom: 8px;
+  }
+}
+
+@media (min-width: 1020px) {
+
+  .recipe-content {
+    flex-direction: row;
+    flex-flow: row wrap;
+  }
+
+  .recipe-info-panel {
+    width: 30%;
+  }
+
+  .recipe-instructions {
+    width: 70%;
+  }
+}
+
+
+/* Add responsive width rules for larger screens */
+@media (min-width: 1200px) {
+
   .login-form {
-    justify-content: flex-end;
+    width: 40%;
   }
 
-  .login-content-wrapper {
-    max-width: 500px;
+  .chat-container {
+    /* Larger width on large screens */
+    width: 85%;
   }
 
-  .form-group {
-    width: 65%;
+  .chatbot-content-wrapper {
+    width: 95%;
   }
 
+  .recipe-content {
+    flex-direction: row;
+    flex-flow: nowrap;
+  }
 }
