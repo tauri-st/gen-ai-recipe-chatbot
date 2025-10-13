@@ -27,12 +27,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (chatContainer.classList.contains('minimized')) {
           // Restore window
           chatContainer.classList.remove('minimized');
-          minimizeBtn.querySelector('img').src = minimizeBtn.querySelector('img').src.replace('open-icon.png', 'open-icon.png');
+          minimizeBtn.querySelector('img').src = minimizeBtn.querySelector('img').src.replace('open-icon.png', 'minimize-icon.png');
           minimizeBtn.querySelector('.visually-hidden').textContent = 'minimize';
         } else {
           // Minimize window
           chatContainer.classList.add('minimized');
-          minimizeBtn.querySelector('img').src = minimizeBtn.querySelector('img').src.replace('open-icon.png', 'open-icon.png');
+          minimizeBtn.querySelector('img').src = minimizeBtn.querySelector('img').src.replace('minimize-icon.png', 'open-icon.png');
           minimizeBtn.querySelector('.visually-hidden').textContent = 'restore';
         }
       }
