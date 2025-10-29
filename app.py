@@ -42,11 +42,8 @@ from gutenberg.recipes_storage_and_retrieval_v2 import (
 # Load environment variables from a .env file
 load_dotenv(override=True)
 
-# * Set up logging in the app.log file
+# * Set up logging to stream to console only (GAE doesn't allow file writing)
 log = logging.getLogger("assistant")
-log_handler = logging.FileHandler("app.log")
-log_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-log.addHandler(log_handler)
 log.setLevel(logging.INFO)
 
 # * Also log to console for debugging
