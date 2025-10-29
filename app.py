@@ -204,7 +204,7 @@ def create_recipes_multi_query_tool():
 # Routes
 # Index route
 @app.route("/", methods=["GET"])
-# @login_required - Temporarily disabled for testing
+@login_required
 def index():
     return render_template("index.html")  # Serve the chat interface
 
