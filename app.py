@@ -77,7 +77,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 # * Temporarily disable login for testing
-app.config['LOGIN_DISABLED'] = True
+# app.config['LOGIN_DISABLED'] = True
 
 # User model
 class User(UserMixin, db.Model):
@@ -212,7 +212,6 @@ def index():
     return render_template("index.html")  # Serve the chat interface
 
 # Stream route
-# * Began with working code. Attempting to edit out as much duplication as possible and leave clean code
 @app.route("/stream", methods=["GET"])
 #@login_required
 def stream():
