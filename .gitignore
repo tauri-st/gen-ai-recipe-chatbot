@@ -8,3 +8,4 @@ texts/
 __pycache__/
 chefboost-env
 .env
+secret.yaml
